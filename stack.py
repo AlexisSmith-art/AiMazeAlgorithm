@@ -3,13 +3,13 @@ from node import Node
 class Stack:
     def __init__(self):
         self.head = None
-        self.length = 0
+        self.count = 0
     
     def empty(self):
-        return self.length == 0
+        return self.count == 0
     
     def size(self):
-        return self.length
+        return self.count
     
     def peek(self):
         if self.head:
@@ -21,7 +21,7 @@ class Stack:
         for node in nodes:
             node.next = self.head
             self.head = node
-            self.length += 1
+            self.count += 1
     
     def retrieve(self):
         if not self.empty():
@@ -30,7 +30,7 @@ class Stack:
                 self.head = node.next
             else:
                 self.head = None
-            self.length -= 1
+            self.count -= 1
             return node
         return None
 
