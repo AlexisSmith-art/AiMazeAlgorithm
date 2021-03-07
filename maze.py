@@ -79,7 +79,7 @@ class Maze():
     def greedy_best_first_search(self):
         self.explored = []
         frontier = Heap()
-        frontier.add(HeapNode(self.start, self.priority(self.start)))
+        frontier.add(HeapNode(self.start, priority=self.priority(self.start)))
 
         solved_node = self.__solve(frontier, heap=True)
         solution = [solved_node.value]
@@ -91,7 +91,22 @@ class Maze():
         self.solution = solution
 
     
-    def __solve(self, frontier, heap=False):
+    def a_star_search(self):
+        self.explored = []
+        frontier = Heap()
+        frontier.add(HeapNode(self.start, priority=self.priority(self.start)))
+
+        solved_node = self.__solve(frontier, heap=True, a_star=True)
+        solution = [solved_node.value]
+
+        while solved_node.parent != None:
+            solution.append(solved_node.parent.value)
+            solved_node = solved_node.parent
+
+        self.solution = solution
+
+    
+    def __solve(self, frontier, heap=False, a_star=False, cost=0):
         if frontier.empty():
             return None
         node = frontier.retrieve()
@@ -104,15 +119,18 @@ class Maze():
         if not next_cells:
             return None
         
+        if a_star:
+            cost = node.cost
+            cost +=1
         next_cells = [cell for cell in next_cells if cell not in self.explored]
         for cell in next_cells:
             if heap:
-                child_node = HeapNode(cell, self.priority(cell), node)
+                child_node = HeapNode(value=cell, parent=node, priority=self.priority(cell) + cost, cost=cost)
             else:
-                child_node = Node(cell, node)
+                child_node = Node(value=cell, parent=node)
             frontier.add(child_node)
 
-        solved_node = self.__solve(frontier, heap)
+        solved_node = self.__solve(frontier, heap, a_star, cost=cost)
         if solved_node:
             return solved_node
         return None
@@ -180,5 +198,7 @@ maze.print(explored=True)
 maze.breath_first_search()
 maze.print(explored=True)
 maze.greedy_best_first_search()
+maze.print(explored=True)
+maze.a_star_search()
 maze.print(explored=True)
 

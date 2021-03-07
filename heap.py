@@ -1,8 +1,9 @@
 class HeapNode():
-    def __init__(self, value, priority=0, parent=None):
+    def __init__(self, value, parent=None, priority=0, cost=0):
         self.value = value
         self.priority = priority
         self.parent = parent
+        self.cost = cost
 
 class Heap():
 
